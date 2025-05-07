@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head><title>Redirecting..,.</title></head>
+  <head><title>Redirecting...</title></head>
   <body>
     <script>
-      const params = new URLSearchParams(window.location.hash.slice(1)); // get tokens from URL hash
+      const params = new URLSearchParams(window.location.hash.slice(1));
       const access_token = params.get("access_token");
       const refresh_token = params.get("refresh_token");
 
       if (access_token && refresh_token) {
+        // Redirect to Electron app via deep link
         window.location.href = `overlai://auth?access_token=${access_token}&refresh_token=${refresh_token}`;
+
+        // Try to close the tab after 1 second
+        setTimeout(() => {
+          window.open('', '_self', ''); // required in some browsers
+          window.close();
+        }, 1000);
       } else {
         document.body.innerText = "Token(s) missing!";
         console.error("❌ Missing token(s):", { access_token, refresh_token });
