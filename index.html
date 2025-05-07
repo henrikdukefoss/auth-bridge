@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Redirecting...</title></head>
+  <body>
+    <script>
+      const params = new URLSearchParams(window.location.hash.slice(1)); // get token from URL hash
+      const token = params.get("access_token");
+
+      if (token) {
+        window.location.href = `overlai://auth?access_token=${token}`;
+      } else {
+        document.body.innerText = "Token missing!";
+      }
+    </script>
+  </body>
+</html>
