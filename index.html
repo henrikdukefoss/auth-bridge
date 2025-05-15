@@ -8,14 +8,13 @@
       const refresh_token = params.get("refresh_token");
 
       if (access_token && refresh_token) {
-        // Redirect to Electron app via deep link
+        // Trigger Electron app via deep link
         window.location.href = `overlai://auth?access_token=${access_token}&refresh_token=${refresh_token}`;
 
-        // Try to close the tab after 1 second
+        // After short delay, redirect to your website
         setTimeout(() => {
-          window.open('', '_self', ''); // required in some browsers
-          window.close();
-        }, 1000);
+          window.location.href = "https://www.overl.ai";
+        }, 500); // enough time for Electron to capture the deep link
       } else {
         document.body.innerText = "Token(s) missing!";
         console.error("❌ Missing token(s):", { access_token, refresh_token });
