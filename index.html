@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Redirecting to app...</title>
+  <title>Redirecting to Overl.ai...</title>
   <style>
     body {
       margin: 0;
@@ -30,7 +30,7 @@
 </head>
 <body>
   <h2>🔗 Logging you in...</h2>
-  <p>Please confirm the “Open Electron” prompt to finish logging in.<br><br>
+  <p>Please confirm the “Open Overlai” prompt to finish logging in.<br><br>
      You’ll be redirected automatically shortly.</p>
 
   <script>
@@ -39,19 +39,25 @@
     const refresh_token = params.get("refresh_token");
 
     if (access_token && refresh_token) {
-      // Trigger Electron app deep link via hidden iframe
+      const encodedAccess = encodeURIComponent(access_token);
+      const encodedRefresh = encodeURIComponent(refresh_token);
+      const deeplink = `overlai://auth-callback/?access_token=${encodedAccess}&refresh_token=${encodedRefresh}`;
+
+      // Open Electron app via deep link using iframe
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
-      iframe.src = `overlai://auth?access_token=${access_token}&refresh_token=${refresh_token}`;
+      iframe.src = deeplink;
       document.body.appendChild(iframe);
 
-      // Wait ~6 seconds, then redirect to site
+      console.log("🔁 Redirecting to:", deeplink);
+
+      // Fallback redirect after delay
       setTimeout(() => {
         window.location.href = "https://www.overl.ai";
       }, 6000);
     } else {
       document.body.innerHTML = "<h2>❌ Missing token(s)</h2><p>Something went wrong with login.</p>";
-      console.error("Missing token(s):", { access_token, refresh_token });
+      console.error("❌ Missing tokens in URL:", window.location.href);
     }
   </script>
 </body>
